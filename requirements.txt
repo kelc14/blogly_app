@@ -1,0 +1,11 @@
+blinker==1.4
+Click==7.0
+Flask==1.0.2
+Flask-DebugToolbar==0.10.1
+itsdangerous==1.1.0
+Jinja2==2.10
+MarkupSafe==1.1.0
+SQLAlchemy==1.4.46
+Flask-SQLAlchemy==2.5.1
+psycopg2-binary
+Werkzeug==0.14.1
