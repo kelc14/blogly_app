@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% block title %}{{user.first_name}}'s Page{% endblock
+%} {% block content %}
+<h2 class="display-2 text-center">{{user.full_name}}</h2>
+<div class="container">
+  {% with messages = get_flashed_messages() %} {% if messages %}
+  <div class="alert alert-success flashes" role="alert">
+    {% for message in messages %} {{ message }} {% endfor %}
+  </div>
+  {% endif %} {% endwith %}
+</div>
+
+<div class="container">
+  <div class="row align-items-start">
+    <div class="col">
+      <img src="{{user.image_url}}" alt="user image" style="max-width: 300px" />
+    </div>
+    <div class="col">
+      <a href="/users/{{user.id}}/edit" class="btn btn-primary m-2"
+        >Edit User</a
+      >
+      <form action="/users/{{user.id}}/delete" method="post">
+        <button class="btn btn-danger m-2">Delete User</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- <img src="{{user.image_url}}" alt="user image" style="max-width: 300px" />
+  <br />
+  <a href="/users/{{user.id}}/edit" class="btn btn-primary m-2">Edit User</a>
+  <form action="/users/{{user.id}}/delete" method="post" style="float: left">
+    <button class="btn btn-danger m-2">Delete User</button>
+  </form> -->
+</div>
+
+<div class="container mt-5">
+  <h3 class="display-4">My Posts</h3>
+  <ul>
+    {% if posts %} {% for post in posts %}
+    <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+    {% endfor %} {% else %}
+    <li>No Posts Yet!</li>
+    {% endif %}
+  </ul>
+  <a href="/users/{{user.id}}/posts/new" class="btn btn-primary">Add Post</a>
+</div>
+
+{% endblock %}

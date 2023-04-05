@@ -1,4 +1,4 @@
-from models import User, db
+from models import User, db, Post
 from app import app
 
 # Create all tables
@@ -17,4 +17,13 @@ db.session.add(john)
 db.session.add(abby)
 db.session.add(greg)
 
+db.session.commit()
+
+post1 = Post(title="My First Post", content="This is a sample post. Not really sure what to write in here.", user_id=2)
+
+post2 = Post(title="My Second Post", content="What's up!!", user_id=2)
+
+post3 = Post(title="Don't call me a blogger yet, but...!", content="My name is greg and I am writing my first blog post. Yay me!", user_id=3)
+
+db.session.add_all([post1, post2, post3])
 db.session.commit()

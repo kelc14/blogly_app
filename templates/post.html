@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% block title %} Post{% endblock %} {% block content
+%}
+<h2 class="display-3 mt-5">{{post.title}}</h2>
+<p>{{post.content}}</p>
+<p style="font-style: italic">
+  Written By: {{post.user.full_name}}
+  <br /><small>Posted on {{post.display_date_time()}}</small>
+</p>
+
+<br />
+<a href="/users/{{post.user_id}}" class="btn btn-secondary"
+  >Go Back to {{post.user.full_name}}'s Page</a
+>
+
+<a href="/posts/{{post.id}}/edit" class="btn btn-warning">Edit</a>
+<form action="/posts/{{post.id}}/delete" method="post" style="display: inline">
+  <button class="btn btn-danger">Delete</button>
+</form>
+
+{% endblock %}

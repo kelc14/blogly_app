@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block title %}HOME{% endblock %} {% block content
+%}
+<h2 class="display-2 text-center">Blogly Users</h2>
+<div class="container d-flex justify-content-center">
+  <a href="/users/new" class="btn btn-secondary w-25 p-3">Add a New User</a>
+</div>
+
+<div class="container d-flex p-2 flex-wrap">
+  {% for user in users %}
+  <div class="card mx-3" style="width: 18rem">
+    <img
+      src="{{user.image_url}}"
+      class="card-img-top user-img"
+      alt="user image"
+    />
+    <div class="card-body">
+      <h5 class="card-title">{{user.full_name}}</h5>
+      <!-- <p class="card-text">
+      Some quick example text to build on the card title and make up the bulk of
+      the card's content.
+    </p> -->
+      <a href="/users/{{user.id}}" class="btn btn-primary">View Page</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

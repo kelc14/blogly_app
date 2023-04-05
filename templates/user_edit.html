@@ -1,19 +1,42 @@
 {% extends "base.html" %} {% block title %}Edit {{user.full_name}}{% endblock %}
 {% block content %}
 
-<h2>Edit User Profile</h2>
-<form action="/users/{{user.id}}/edit" method="post">
-  <label for="first_name">First Name</label>
-  <input type="text" name="first_name" value="{{user.first_name}}" />
-  <br />
-  <label for="last_name">Last Name</label>
-  <input type="text" name="last_name" value="{{user.last_name}}" />
-  <br />
-  <label for="image_url">Image URL</label>
-  <input type="text" name="image_url" value="{{user.image_url}}" />
-  <br />
-  <button><a href="/users/{{user.id}}">Cancel</a></button>
-  <button type="submit">Update</button>
-</form>
+<h2 class="display-2 text-center">Edit User Profile</h2>
+<div class="container-sm">
+  <form action="/users/{{user.id}}/edit" method="post">
+    <div class="form-group">
+      <label for="first_name">First Name</label>
+      <input
+        type="text"
+        name="first_name"
+        value="{{user.first_name}}"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="last_name">Last Name</label>
+      <input
+        type="text"
+        name="last_name"
+        value="{{user.last_name}}"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="image_url">Image URL</label>
+      <input
+        type="text"
+        name="image_url"
+        value="{{user.image_url}}"
+        class="form-control"
+      />
+    </div>
+
+    <a href="/users/{{user.id}}" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-success">Update</button>
+  </form>
+</div>
 
 {% endblock %}
