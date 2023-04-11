@@ -11,15 +11,22 @@ content %}
 
     <div class="form-group">
       <label for="content">Post Content</label>
-      <textarea name="content" id="" cols="30" rows="10" class="form-control">
-      </textarea>
+      <textarea
+        name="content"
+        id=""
+        cols="30"
+        rows="10"
+        class="form-control"
+      ></textarea>
     </div>
 
-    <div class="form-group">
-      <label for="tags">Tags: (optional)</label>
+    <div class="form-group my-3">
+      <label for="tags">Tags: (optional)</label> <br />
       {% for tag in tags %}
       <div class="checkbox-column">
-        <input type="checkbox" /><span>{{tag.name}}</span>
+        <input type="checkbox" name="tag" value="{{tag.id}}" /><span
+          >{{tag.name}}</span
+        >
       </div>
       {% endfor %}
     </div>

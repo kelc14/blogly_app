@@ -2,7 +2,7 @@
 
 from flask import Flask, request, redirect, render_template, flash, url_for
 from models import db, connect_db, User, Post, Tag, PostTag
-from sqlalchemy import desc
+from sqlalchemy import desc, select
 
 
 app = Flask(__name__)
@@ -110,6 +110,14 @@ def add_new_user_post(user_id):
     db.session.add(post)
     db.session.commit()
 
+    tag_list = request.form.getlist('tag')
+    add_tags = []
+    for tag in tag_list:
+        post_tag = PostTag(post_id=post.id, tag_id=tag)
+        add_tags.append(post_tag)
+    db.session.add_all(add_tags)
+    db.session.commit()    
+
     flash('New Post Added!')
 
     return redirect(f"/users/{user_id}")
@@ -137,6 +145,19 @@ def update_post(post_id):
 
     db.session.add(post)
     db.session.commit()
+
+    posts_tag = PostTag.query.filter_by(post_id=post_id).all()
+    for post in posts_tag:
+        post.remove_tag_from_post()
+
+    tag_list = request.form.getlist('tag')
+    add_tags = []
+    for tag in tag_list:
+        post_tag = PostTag(post_id=post_id, tag_id=tag)
+        add_tags.append(post_tag)
+    db.session.add_all(add_tags)
+    db.session.commit()  
+
     return redirect(f'/posts/{post_id}')
 
 @app.route('/posts/<int:post_id>/delete', methods=['POST'])
@@ -194,9 +215,11 @@ def update_tag(tag_id):
     db.session.commit()
     return redirect(f'/tags/{tag_id}')
 
-# @app.route('/tags/<int:tag_id>/delete')
-# def delete_tag(tag_id):
-#     return redirect('/')
+@app.route('/tags/<int:tag_id>/delete', methods=['POST'])
+def delete_tag(tag_id):
+    tag = Tag.query.get_or_404(tag_id)
+    tag.delete_tag()
+    return redirect('/tags')
 
 
 # if an error is found

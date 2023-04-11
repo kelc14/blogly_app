@@ -21,6 +21,23 @@ content %}
       >
     </div>
 
+    <div class="form-group my-3">
+      <label for="tags">Tags: (optional)</label> <br />
+      {% for tag in tags %} {% if tag in post.tags %}
+      <div class="checkbox-column">
+        <input type="checkbox" name="tag" value="{{tag.id}}" checked /><span
+          >{{tag.name}}</span
+        >
+      </div>
+      {% else %}
+      <div class="checkbox-column">
+        <input type="checkbox" name="tag" value="{{tag.id}}" /><span
+          >{{tag.name}}</span
+        >
+      </div>
+      {% endif %} {% endfor %}
+    </div>
+
     <a href="/posts/{{post.id}}" class="btn btn-secondary">Cancel</a>
     <button type="submit" class="btn btn-success">Update</button>
   </form>

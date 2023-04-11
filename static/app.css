@@ -1,3 +1,4 @@
-html {
-  background-color: aqua !important;
+.checkbox-column {
+  display: inline-block;
+  width: 32%;
 }

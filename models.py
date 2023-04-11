@@ -68,6 +68,9 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, 
                         db.ForeignKey('users.id'), nullable=False)
     
+    tags = db.relationship('Tag', secondary="posts_tags", backref="posts", cascade="save-update")
+
+    
     def delete_post(self):
         """Delete the post."""
         post = Post.query.filter_by(id=self.id).first()
@@ -102,7 +105,13 @@ class Tag(db.Model):
         name = db.Column(db.String(50), 
                            nullable=False,
                             unique=True)
-        posts = db.relationship('Post', secondary="posts_tags", backref="tags")
+        
+        def delete_tag(self):
+            """Delete the tag."""
+            tag = Tag.query.filter_by(id=self.id).first()
+            db.session.delete(tag)
+            db.session.commit()
+            return
         
 class PostTag(db.Model):
         """Mapping for tags onto posts in Blogly"""
@@ -119,5 +128,12 @@ class PostTag(db.Model):
         tag_id = db.Column(db.Integer,
                            db.ForeignKey('tags.id'),
                            primary_key=True)
+        
+        def remove_tag_from_post(self):
+            """Remove the tag from the post."""
+            post_tag = PostTag.query.filter_by(post_id=self.post_id, tag_id=self.tag_id).first()
+            db.session.delete(post_tag)
+            db.session.commit()
+            return
 
     
