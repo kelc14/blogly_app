@@ -1,7 +1,7 @@
 """Blogly application."""
 
-from flask import Flask, request, redirect, render_template, flash
-from models import db, connect_db, User, Post
+from flask import Flask, request, redirect, render_template, flash, url_for
+from models import db, connect_db, User, Post, Tag, PostTag
 from sqlalchemy import desc
 
 
@@ -96,7 +96,8 @@ def delete_user(user_id):
 def display_new_post_form(user_id):
     """Display a new post form for the user with the given user_id"""
     user = User.query.get(user_id)
-    return render_template('user_post_new.html', user=user)
+    tags = Tag.query.all()
+    return render_template('post_new.html', user=user, tags=tags)
 
 @app.route('/users/<int:user_id>/posts/new', methods=['POST'])
 def add_new_user_post(user_id):
@@ -123,8 +124,9 @@ def display_post(post_id):
 def display_edit_post(post_id):
     """Display the edit form for the selected post."""
     post = Post.query.get_or_404(post_id)
+    tags = Tag.query.all()
 
-    return render_template('post_edit.html', post=post)
+    return render_template('post_edit.html', post=post, tags=tags)
 
 @app.route('/posts/<int:post_id>/edit', methods=['POST'])
 def update_post(post_id):
@@ -144,6 +146,57 @@ def delete_post(post_id):
     user = post.user_id
     post.delete_post()
     return redirect(f'/users/{user}')
+
+# tags - add, edit, remove
+
+@app.route('/tags')
+def display_tags():
+    tags = Tag.query.all()
+    return render_template('tags.html', tags = tags)
+
+@app.route('/tags/<int:tag_id>')
+def display_tag_info(tag_id):
+    tag = Tag.query.get_or_404(tag_id)
+    return render_template('tag_detail.html', tag=tag)
+
+@app.route('/tags/new')
+def add_new_tag():
+    return render_template('tag_new.html')
+
+@app.route('/tags/new', methods=['POST'])
+def add_new_tag_to_db():
+    """"Add new tag and redirect to tag homepage"""
+    name = request.form['name']
+    
+    tag = Tag(name=name)
+
+    db.session.add(tag)
+    db.session.commit()
+
+    flash('New Tag Added!')
+
+    return redirect("/tags")
+
+@app.route('/tags/<int:tag_id>/edit')
+def display_edit_tag_form(tag_id):
+    """Display the edit form for the selected tag."""
+    tag = Tag.query.get_or_404(tag_id)
+
+    return render_template('tag_edit.html', tag=tag)
+
+@app.route('/tags/<int:tag_id>/edit', methods=['POST'])
+def update_tag(tag_id):
+    """Update tag information in db"""
+    tag = Tag.query.get_or_404(tag_id)
+    tag.name = request.form['name']
+
+    db.session.add(tag)
+    db.session.commit()
+    return redirect(f'/tags/{tag_id}')
+
+# @app.route('/tags/<int:tag_id>/delete')
+# def delete_tag(tag_id):
+#     return redirect('/')
 
 
 # if an error is found

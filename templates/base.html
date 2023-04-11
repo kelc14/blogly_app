@@ -11,7 +11,7 @@
       integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/static/app.css" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='app.css') }}" />
   </head>
   <body>
     <ul class="nav nav-tabs">
@@ -20,6 +20,9 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/users">Users</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/tags">Tags</a>
       </li>
     </ul>
 

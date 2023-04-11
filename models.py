@@ -17,6 +17,10 @@ class User(db.Model):
 
     __tablename__ = 'users'
 
+    def __repr__ (self):
+         e = self
+         return f"<User {e.id}, full_name = {e.full_name}>"
+
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
@@ -27,7 +31,7 @@ class User(db.Model):
     image_url = db.Column(db.Text,
                           default = 'https://www.nicepng.com/png/detail/73-730154_open-default-profile-picture-png.png')
     
-    # posts = db.relationship('Post', backref="user", lazy=True, cascade='all,delete')
+    posts = db.relationship('Post', backref="user", cascade='all,delete')
     
     def delete_user(self):
         """Delete the user."""
@@ -48,6 +52,10 @@ class Post(db.Model):
 
     __tablename__ = 'posts'
 
+    def __repr__ (self):
+         e = self
+         return f"<Post {e.id}, title = {e.title}, user_id={e.user_id}>"
+
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
@@ -60,9 +68,6 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, 
                         db.ForeignKey('users.id'), nullable=False)
     
-    user = db.relationship('User', backref=backref("posts", cascade="all,delete"))
-
-
     def delete_post(self):
         """Delete the post."""
         post = Post.query.filter_by(id=self.id).first()
@@ -79,5 +84,40 @@ class Post(db.Model):
 
         return f"{month} {date_obj.day}, {date_obj.year} at {date_obj.hour}:{date_obj.minute}"
         
+
+
+class Tag(db.Model):
+        """Model for tags in Blogly"""
+
+        __tablename__ = 'tags'
+
+        def __repr__ (self):
+         e = self
+         return f"<tag_id {e.id}, name = {e.name}>"
+
+        id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+        
+        name = db.Column(db.String(50), 
+                           nullable=False,
+                            unique=True)
+        posts = db.relationship('Post', secondary="posts_tags", backref="tags")
+        
+class PostTag(db.Model):
+        """Mapping for tags onto posts in Blogly"""
+
+        __tablename__ = 'posts_tags'
+
+        def __repr__ (self):
+         e = self
+         return f"<post_id {e.post_id}, tag_id = {e.tag_id}>"
+        
+        post_id = db.Column(db.Integer,
+                           db.ForeignKey('posts.id'),
+                           primary_key=True)
+        tag_id = db.Column(db.Integer,
+                           db.ForeignKey('tags.id'),
+                           primary_key=True)
 
     

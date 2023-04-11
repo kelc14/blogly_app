@@ -1,11 +1,15 @@
-{% extends "base.html" %} {% block title %}HOME{% endblock %} {% block content
+{% extends "base.html" %} {% block title %}TAGS{% endblock %} {% block content
 %}
-<h2 class="display-2 text-center">Blogly Recent Posts</h2>
-
+<h2 class="display-2 text-center">#{{tag.name}}</h2>
+<div class="d-flex flex-row justify-content-center">
+  <a href="/tags/{{tag.id}}/edit" class="btn btn-primary m-2">Edit Tag</a>
+  <form action="/tags/{{tag.id}}/delete" method="post">
+    <button class="btn btn-danger m-2">Delete Tag</button>
+  </form>
+</div>
 <div class="container">
-  {% for post in posts %}
+  {% if tag.posts %} {% for post in tag.posts %}
   <div class="card mx-3 mt-3">
-    <!-- <img src="#" class="card-img-top" alt="user image" /> -->
     <div class="card-body">
       <h5 class="card-title">{{post.title}}</h5>
       <p class="card-text">{{post.content}}</p>
@@ -23,7 +27,9 @@
       <a href="/posts/{{post.id}}" class="btn btn-primary">View Post</a>
     </div>
   </div>
-  {% endfor %}
+  {% endfor %} {% else %}
+  <p style="font-style: italic">This tag hasn't been used yet!</p>
+  {% endif %}
 </div>
 
 {% endblock %}

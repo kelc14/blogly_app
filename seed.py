@@ -1,4 +1,4 @@
-from models import User, db, Post
+from models import User, db, Post, Tag, PostTag
 from app import app
 
 # Create all tables
@@ -19,11 +19,32 @@ db.session.add(greg)
 
 db.session.commit()
 
-post1 = Post(title="My First Post", content="This is a sample post. Not really sure what to write in here.", user_id=2)
+post1 = Post(title="My First Post", content="We went on vacation... I can't wait to tell you all about it. I decided it is time to be a blogger! So here we go!", user_id=2)
 
 post2 = Post(title="My Second Post", content="What's up!!", user_id=2)
 
 post3 = Post(title="Don't call me a blogger yet, but...!", content="My name is greg and I am writing my first blog post. Yay me!", user_id=3)
 
 db.session.add_all([post1, post2, post3])
+db.session.commit()
+
+
+first = Tag(name="first")
+funny = Tag(name="funny")
+weird = Tag(name="weird")
+sunshine = Tag(name="sunshine")
+blogger = Tag(name='blogger')
+
+db.session.add_all([first,funny,weird,sunshine, blogger])
+db.session.commit()
+
+tag1 = PostTag(post_id=1,tag_id=1)
+tag2 = PostTag(post_id=1,tag_id=5)
+tag3 = PostTag(post_id=2,tag_id=5)
+tag4 = PostTag(post_id=2,tag_id=3)
+tag5 = PostTag(post_id=3,tag_id=1)
+tag6 = PostTag(post_id=3,tag_id=2)
+tag7 = PostTag(post_id=3,tag_id=5)
+
+db.session.add_all([tag1, tag2, tag3, tag4, tag5, tag6, tag7])
 db.session.commit()

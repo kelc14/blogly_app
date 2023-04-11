@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% block title %}TAGS{% endblock %} {% block content
+%}
+
+<h2 class="display-2 text-center">Explore Posts by Popular Tags</h2>
+<div class="container w-50">
+  {% with messages = get_flashed_messages() %} {% if messages %}
+  <div class="alert alert-success flashes" role="alert">
+    {% for message in messages %} {{ message }} {% endfor %}
+  </div>
+  {% endif %} {% endwith %}
+</div>
+<div class="d-flex flex-row justify-content-center">
+  <a href="/tags/new" class="btn btn-secondary w-25 p-3 mb-3">Add New Tag</a>
+</div>
+
+<div class="container w-75 d-flex justify-content-center flex-wrap">
+  {% for tag in tags %}
+
+  <a href="/tags/{{tag.id}}" class="btn btn-info m-2"><i>{{tag.name}}</i></a>
+
+  {% endfor %}
+</div>
+
+{% endblock %}

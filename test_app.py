@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app
-from models import db, User
+from models import db, User, Post 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
 app.config['SQLALCHEMY_ECHO'] = False
@@ -26,13 +26,27 @@ class UserViewsTestCase(TestCase):
         db.session.commit()
 
         self.user_id = user.id
+
+        # post = Post(title="Hello", content='This is the content.', user_id=self.user_id)
+
+        # db.session.add(post)
+        # db.session.commit()
     
     def tearDown(self):
         """Clean up any fouled transaction"""
 
         db.session.rollback()
+    
+    def test_show_homepage(self):
+        with app.test_client() as client:
+            resp = client.get('/')
+            html = resp.get_data(as_text=True)
 
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Blogly Recent Posts', html)
 
+    #### tests for users 
+    
     def test_list_users(self):
         with app.test_client() as client:
             resp = client.get('/users')
@@ -47,9 +61,9 @@ class UserViewsTestCase(TestCase):
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('<h2>Jane Smith</h2>', html)
+            self.assertIn('<h2 class="display-2 text-center">Jane Smith</h2>', html)
 
-    def test_update_user(self):
+    def test_user_update(self):
         with app.test_client() as client:
             resp = client.post(f'/users/{self.user_id}/edit', data={
                 "first_name": 'Purple',
@@ -59,7 +73,7 @@ class UserViewsTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 302)
 
-    def test_update_redirect(self):
+    def test_user_update_redirect(self):
         with app.test_client() as client:
             resp = client.post(f'/users/{self.user_id}/edit', data={
                     "first_name": 'Purple',
@@ -84,3 +98,6 @@ class UserViewsTestCase(TestCase):
             
             self.assertEqual(resp.status_code, 200)
             self.assertNotIn('Jane Smith', html)
+
+
+    ######  tests for posts
